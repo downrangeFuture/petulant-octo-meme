@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Application strings -->
+    <string name="app_name">VStarGauge</string>
+    
+    <!-- Menu Strings -->
+    <string name="action_settings">Settings</string>
+    <string name="title_section1">Main</string>
+    <string name="title_section2">Map</string>
+    <string name="title_section3">Extras</string>
+    <string name="reset_trip_title">Reset Trip</string>
+    <string name="calculate_mpg_title">Calcuate MPG</string>
+    <string name="navigate_title">Directions</string>
+    
+    <!-- Alert Dialog strings -->
+    <string name="vdc_high_title">High Voltage!</string>
+    <string name="vdc_high">Battery voltage over 14VDC. Is the regulator functioning properly? Voltage exceeding 17VDC may cause damage to bike and IOIO board.</string>
+    <string name="ouch_title">Over voltage!!!</string>
+    <string name="ouch">Volts exceed 17VDC. Shutdown bike immedately. Check charging system and battery for damage.</string>
+    
+    <!-- Title, textView, and button strings -->
+    <string name="OK">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="retry">Retry</string>
+    <string name="mph">MPH</string>
+    <string name="trip">Trip</string>
+    <string name="vdc">VDC</string>
+    <string name="odometer">Odometer</string>
+    <string name="tach">RPM</string>
+    
+    <!-- Preference Strings -->
+    <string name="logo_color">Logo Color</string>
+
+</resources>
