@@ -82,16 +82,14 @@
         android:textSize="40sp"
         tools:ignore="HardcodedText" />
 
-    <FrameLayout
-        android:id="@+id/mapContainer"
+    <fragment
+        android:id="@+id/mapFragment"
+        class="com.google.android.gms.maps.MapFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/rpmValue"
-        tools:ignore="UselessLeaf" >
-
-    </FrameLayout>
+        android:layout_below="@+id/rpmValue" />
 
 </RelativeLayout>

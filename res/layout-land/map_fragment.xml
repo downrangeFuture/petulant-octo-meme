@@ -89,16 +89,16 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/vdcLabel" />
 
-    <FrameLayout
-        android:id="@+id/mapContainer"
+    <fragment
+        android:id="@+id/mapFragment"
+        class="com.google.android.gms.maps.MapFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/analogClock1"
-        tools:ignore="UselessLeaf" >
+        android:layout_toLeftOf="@+id/analogClock1" >
 
-    </FrameLayout>
+    </fragment>
 
 </RelativeLayout>
