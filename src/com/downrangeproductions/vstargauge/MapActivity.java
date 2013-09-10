@@ -1,6 +1,8 @@
 package com.downrangeproductions.vstargauge;
 
 import android.app.Fragment;
+import android.location.Location;
+//import android.location.LocationListener;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,14 +10,18 @@ import android.view.ViewGroup;
 
 import com.downrangeproductions.navigation.Route;
 import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.maps.MapFragment;
 
-public class MapActivity extends Fragment {
+public class MapActivity extends Fragment implements LocationListener {
 	// ========================================================
 	// private/protected variables
 	
 	private Route route;
 	private LocationClient mLocationClient;
+	private MapFragment mMap;
+	private Location lastLocation;
 	
 	// ========================================================
 	// Statics
@@ -34,7 +40,10 @@ public class MapActivity extends Fragment {
 	// ========================================================
 	// Interfaces
 	
-	
+	@Override
+	public void onLocationChanged(Location location){
+		lastLocation = location;
+	}
 	
 	// ========================================================
 	// Constructors
@@ -58,8 +67,8 @@ public class MapActivity extends Fragment {
 		View view = inflater.inflate(R.layout.map_fragment, container);
 		route = new Route(this.getActivity());
 		
-		
-		
+		mMap = (MapFragment) getActivity().getFragmentManager().findFragmentById(R.id.mapFragment);
+		mLocationClient.requestLocationUpdates(REQUEST, this);
 		
 		return view;
 	}
