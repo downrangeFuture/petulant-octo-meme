@@ -1,4 +1,4 @@
-package com.downrangeproductions.navigation;
+package com.vstargauge.navigation;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -27,7 +27,7 @@ public class Route {
 	// =======================================================================
 	private StringBuffer urlString = new StringBuffer();
 	private RouteStep[] route;
-	private OnGetRouteCompleteListener mListener = null;
+	private GetRouteCompleteListener mListener = null;
 
 	private double fromLat = -999.0;
 	private double fromLong = -999.0;
@@ -57,7 +57,7 @@ public class Route {
 	 * and parsed.
 	 * 
 	 */
-	public interface OnGetRouteCompleteListener {
+	public interface GetRouteCompleteListener {
 		public void onGetRouteComplete(int routeStatus);
 	}
 
@@ -98,7 +98,7 @@ public class Route {
 	}
 
 	public Route(Context context, LatLng fromLatLng, String destination,
-			Route.OnGetRouteCompleteListener listener) {
+			Route.GetRouteCompleteListener listener) {
 		mContext = context;
 		this.fromLat = fromLatLng.latitude;
 		this.fromLong = fromLatLng.longitude;
@@ -221,7 +221,7 @@ public class Route {
 	}
 
 	public void setOnRouteTaskCompleteListener(
-			Route.OnGetRouteCompleteListener listener) {
+			Route.GetRouteCompleteListener listener) {
 		mListener = listener;
 	}
 

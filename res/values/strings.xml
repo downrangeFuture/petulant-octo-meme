@@ -31,5 +31,7 @@
     
     <!-- Preference Strings -->
     <string name="logo_color">Logo Color</string>
+    <string name="directions_title">Get Directions</string>
+    <string name="stop_nav">Stop Navigation</string>
 
 </resources>

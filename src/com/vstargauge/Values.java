@@ -1,4 +1,4 @@
-package com.downrangeproductions.vstargauge;
+package com.vstargauge;
 
 import android.os.Parcel;
 import android.os.Parcelable;

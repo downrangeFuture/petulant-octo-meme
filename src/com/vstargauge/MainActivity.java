@@ -1,4 +1,6 @@
-package com.downrangeproductions.vstargauge;
+package com.vstargauge;
+
+import com.downrangeproductions.vstargauge.R;
 
 import ioio.lib.api.AnalogInput;
 import ioio.lib.api.DigitalInput;

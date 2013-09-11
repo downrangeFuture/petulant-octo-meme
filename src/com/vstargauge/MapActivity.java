@@ -1,20 +1,26 @@
-package com.downrangeproductions.vstargauge;
+package com.vstargauge;
 
 import android.app.Fragment;
 import android.location.Location;
-//import android.location.LocationListener;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.downrangeproductions.navigation.Route;
+import com.downrangeproductions.vstargauge.R;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.MapFragment;
+import com.vstargauge.navigation.Navigation;
+import com.vstargauge.navigation.Navigation.RouteListener;
+import com.vstargauge.navigation.Route;
+//import android.location.LocationListener;
 
-public class MapActivity extends Fragment implements LocationListener {
+public class MapActivity extends Fragment implements LocationListener, RouteListener {
 	// ========================================================
 	// private/protected variables
 	
@@ -22,6 +28,7 @@ public class MapActivity extends Fragment implements LocationListener {
 	private LocationClient mLocationClient;
 	private MapFragment mMap;
 	private Location lastLocation;
+	private Navigation navHandler;
 	
 	// ========================================================
 	// Statics
@@ -53,12 +60,12 @@ public class MapActivity extends Fragment implements LocationListener {
 	// ========================================================
 	// Overrides
 	
-//	@Override
-//	public void onCreate(Bundle savedInstanceState) {
-//		super.onCreate(savedInstanceState);
-//		setContentView(R.layout.map_fragment);
-//		
-//	}
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
+		
+	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -70,7 +77,29 @@ public class MapActivity extends Fragment implements LocationListener {
 		mMap = (MapFragment) getActivity().getFragmentManager().findFragmentById(R.id.mapFragment);
 		mLocationClient.requestLocationUpdates(REQUEST, this);
 		
+		navHandler = new Navigation();
+		
 		return view;
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+		inflater.inflate(R.menu.map_menu, menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item){
+		switch(item.getItemId()){
+			case R.id.get_directions:
+				//TODO Get some directions and start navigation
+				return true;
+			case R.id.stop_navigation:
+				//TODO Pause or resume the current navigation
+				return true;
+			default:
+				//Not our menu item
+				return false;
+		}
 	}
 	
 	@Override
@@ -80,6 +109,26 @@ public class MapActivity extends Fragment implements LocationListener {
 		setUpMapIfNeeded();
 		setUpLocationClientIfNeeded();
 		mLocationClient.connect();
+	}
+	
+	@Override
+	public void onRouteMissed(){
+		
+	}
+	
+	@Override
+	public void onRouteResumed(){
+		
+	}
+	
+	@Override
+	public void onWaypointReached(){
+		
+	}
+	
+	@Override
+	public void onDestinationReached(){
+		
 	}
 	
 	// ========================================================
@@ -95,6 +144,4 @@ public class MapActivity extends Fragment implements LocationListener {
 	
 	// ========================================================
 	// Private inner classes
-	
-	
 }

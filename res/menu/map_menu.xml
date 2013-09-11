@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/get_directions"
+        android:icon="@drawable/ic_location_directions"
+        android:title="@string/directions_title">
+    </item>
+    <item
+        android:id="@+id/stop_navigation"
+        android:title="@string/stop_nav">
+    </item>
+
+</menu>
