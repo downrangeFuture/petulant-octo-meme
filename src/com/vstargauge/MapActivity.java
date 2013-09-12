@@ -21,10 +21,13 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.vstargauge.navigation.DirectionDialog;
 import com.vstargauge.navigation.Navigation;
 import com.vstargauge.navigation.Navigation.RouteListener;
 import com.vstargauge.navigation.Route;
 import com.vstargauge.navigation.Route.GetRouteCompleteListener;
+import com.vstargauge.navigation.Util;
 import com.vstargauge.util.Constants;
 //import android.location.LocationListener;
 
@@ -39,12 +42,13 @@ public class MapActivity extends Fragment
 	// ========================================================
 	// private/protected variables
 
-	private Route route;
 	private LocationClient mLocationClient;
 	private MapFragment mMapFragment;
 	private GoogleMap mMap;
 	private Location lastLocation;
 	private Navigation navHandler;
+	private MenuItem stopNav;
+	private int stepIndex = 0;
 
 	// ========================================================
 	// Statics
@@ -55,6 +59,8 @@ public class MapActivity extends Fragment
 
 	// ========================================================
 	// Public variables
+	
+	public Route route;
 
 	// ========================================================
 	// Interfaces
@@ -79,6 +85,21 @@ public class MapActivity extends Fragment
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 
+		navHandler = new Navigation();
+		if(savedInstanceState.containsKey(Util.ROUTE)){
+			route = savedInstanceState.getParcelable(Util.ROUTE);
+			navHandler.changeRoute(route);
+			navHandler.setRunning(true);
+		} else {
+			route = new Route(this.getActivity());
+			navHandler.setRunning(false);
+		}
+		route.setOnRouteTaskCompleteListener(this);
+		
+		if(savedInstanceState.containsKey(Util.STEP_INDEX)){
+			stepIndex = savedInstanceState.getInt(Util.STEP_INDEX);
+			navHandler.setNextStepIndex(stepIndex);
+		}
 	}
 
 	@Override
@@ -87,14 +108,9 @@ public class MapActivity extends Fragment
 		super.onCreateView(inflater, container, savedInstanceState);
 
 		View view = inflater.inflate(R.layout.map_fragment, container);
-		route = new Route(this.getActivity());
 
 		mMapFragment = (MapFragment) getActivity().getFragmentManager()
 				.findFragmentById(R.id.mapFragment);
-		mLocationClient.requestLocationUpdates(REQUEST, this);
-
-		navHandler = new Navigation();
-		navHandler.setRunning(false);
 
 		return view;
 	}
@@ -102,22 +118,42 @@ public class MapActivity extends Fragment
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.map_menu, menu);
+		
+		stopNav = (MenuItem) getActivity().findViewById(R.id.stop_navigation);
+		if(navHandler.isRunning()){
+			stopNav.setEnabled(true);
+			stopNav.setTitle(R.string.stop_nav);
+		} else if (route.getRouteLength() <= 0) {
+			stopNav.setEnabled(false);
+		} else {
+			stopNav.setTitle(R.string.start_nav);
+			stopNav.setEnabled(true);
+		}
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.get_directions :
-				// TODO Get some directions and start navigation
+				LatLng location = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
+				
+				DirectionDialog dialog = DirectionDialog.newInstance(location);
+				dialog.show(getFragmentManager(), Util.DIRECTION_DIALOG);
+				stopNav.setEnabled(true);
+				stopNav.setTitle(R.string.stop_nav);
 				return true;
 			case R.id.stop_navigation :
-				// TODO Pause or resume the current navigation
+				if (item.getTitle() == getActivity().getResources().getString(R.string.stop_nav)){
+					navHandler.setRunning(false);
+					this.removeRoute();
+				}
 				return true;
 			default :
 				// Not our menu item
 				return false;
 		}
 	}
+
 
 	@Override
 	public void onResume() {
@@ -223,6 +259,21 @@ public class MapActivity extends Fragment
 
 	// ========================================================
 	// Methods
+	
+	/**
+	 * 
+	 */
+	private void removeRoute() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	/**
+	 * 
+	 */
+	private void showRoute() {
+		
+	}
 
 	protected void setUpMapIfNeeded() {
 		if (mMapFragment == null) {
@@ -232,6 +283,11 @@ public class MapActivity extends Fragment
 		mMap = mMapFragment.getMap();
 		mMap.setMyLocationEnabled(true);
 		mMap.getUiSettings().setAllGesturesEnabled(true);
+		mMap.getUiSettings().setMyLocationButtonEnabled(false);
+		
+		if (navHandler.isRunning()){
+			this.showRoute();
+		}
 	}
 
 	protected void setUpLocationClientIfNeeded() {

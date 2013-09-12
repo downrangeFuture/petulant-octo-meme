@@ -34,9 +34,9 @@ public class Navigation implements Constants {
 	// TODO Add audible command manager
 	// TODO Add direction voice command listener
 
-	private int mNextRoutePointIndex = NOT_SET;
-	private int mNextTurnPointIndex = NOT_SET;
-	// private int mNextTurnPointIndexInRoute = NOT_SET;
+	private int mNextRouteStepIndex = NOT_SET;
+//	private int mNextTurnPointIndex = NOT_SET;
+//	private int mNextTurnPointIndexInRoute = NOT_SET;
 	private int mDistanceToNextTurnPoint = NOT_SET;
 	private long mDistanceToDestination = NOT_SET;
 	private final long mTickDelay = 0;
@@ -145,29 +145,29 @@ public class Navigation implements Constants {
 		// mWaypointsPassed = new boolean[0];
 		// }
 
-		mNextRoutePointIndex = NOT_SET;
-		mNextTurnPointIndex = NOT_SET;
+		mNextRouteStepIndex = 0;
+//		mNextTurnPointIndex = NOT_SET;
 		// mNextTurnPointIndexInRoute = NOT_SET;
 		mDistanceToNextTurnPoint = NOT_SET;
 		mDistanceToDestination = NOT_SET;
 	}
 
-	/**
-	 * Gets the length of the current leg rounded off to a meter.
-	 * 
-	 * @return The current leg length in meters.
-	 */
-	public int getDistanceBetweenNextAndUpperNextWaypoint() {
-		if (mNextTurnPointIndex == NOT_SET) {
-			return Integer.MAX_VALUE;
-		}
-
-		if (mNextTurnPointIndex >= mRoute.getRouteLength() - 1) {
-			return Integer.MAX_VALUE;
-		}
-
-		return Math.round(mRoute.getDistance(mNextTurnPointIndex));
-	}
+//	/**
+//	 * Gets the length of the current leg rounded off to a meter.
+//	 * 
+//	 * @return The current leg length in meters.
+//	 */
+//	public int getDistanceBetweenNextAndUpperNextWaypoint() {
+//		if (mNextTurnPointIndex == NOT_SET) {
+//			return Integer.MAX_VALUE;
+//		}
+//
+//		if (mNextTurnPointIndex >= mRoute.getRouteLength() - 1) {
+//			return Integer.MAX_VALUE;
+//		}
+//
+//		return Math.round(mRoute.getDistance(mNextTurnPointIndex));
+//	}
 
 	/**
 	 * Forces the navigator to call it's RouteListener.offRoute method if set on
@@ -221,7 +221,7 @@ public class Navigation implements Constants {
 	}
 	
 	public int getNextTurnPointIndex(){
-		return this.mNextRoutePointIndex;
+		return this.mNextRouteStepIndex;
 	}
 	
 	public Thread getNavThread() {
@@ -231,9 +231,17 @@ public class Navigation implements Constants {
 	public void setRouteListener(RouteListener listener) {
 		mListener = listener;
 	}
+	
+	public void setNextStepIndex(int nextStepIndex){
+		mNextRouteStepIndex = nextStepIndex;
+	}
 
 	public boolean isTicking() {
 		return ticking;
+	}
+	
+	public boolean isRunning() {
+		return running;
 	}
 
 	public long getTickDelay() {
@@ -293,9 +301,9 @@ public class Navigation implements Constants {
 		public void run() {
 			try {
 				int beforeNextIndexRoutePoint = Math.max(0,
-						Navigation.this.mNextRoutePointIndex);
+						Navigation.this.mNextRouteStepIndex);
 				final ArrayList<LatLng> polyline = mRoute
-						.getPolyline(mNextRoutePointIndex - 1);
+						.getPolyline(mNextRouteStepIndex - 1);
 
 				beforeNextIndexRoutePoint = Math.min(polyline.size() - 1,
 						beforeNextIndexRoutePoint);
@@ -304,7 +312,7 @@ public class Navigation implements Constants {
 						.geoPoint2Point(lastLocation);
 				final int indexOfClosest = Math.max(0, NavAlgorithm
 						.getClosestIndex(
-								mRoute.getPolyline(mNextRoutePointIndex - 1),
+								mRoute.getPolyline(mNextRouteStepIndex - 1),
 								beforeNextIndexRoutePoint, myGPSPositionPoint,
 								Navigation.this.mCurrentSearchIndexCount));
 				if (indexOfClosest == NOT_SET) {
@@ -362,12 +370,12 @@ public class Navigation implements Constants {
 
 				/* Calculate distance to next turn */
 				mDistanceToNextTurnPoint = Util.distanceBetween(
-						mRoute.getEndPoint(mNextRoutePointIndex - 1),
+						mRoute.getEndPoint(mNextRouteStepIndex - 1),
 						lastLocation);
 				if (mDistanceToNextTurnPoint < DISTANCE_FOR_NEXT_TURN) {
-					mNextRoutePointIndex = Math.max(mNextRoutePointIndex + 1,
+					mNextRouteStepIndex = Math.max(mNextRouteStepIndex + 1,
 							mRoute.getRouteLength());
-					if (mNextRoutePointIndex == mRoute.getRouteLength()) {
+					if (mNextRouteStepIndex == mRoute.getRouteLength()) {
 						mListener.onDestinationReached();
 					} else {
 						mListener.onWaypointReached();
@@ -376,7 +384,7 @@ public class Navigation implements Constants {
 
 				final int length = mRoute.getRouteLength();
 				long remainingLength = mDistanceToNextTurnPoint;
-				for (int i = mNextRoutePointIndex; i < length; i++) {
+				for (int i = mNextRouteStepIndex; i < length; i++) {
 					remainingLength += mRoute.getDistance(i);
 				}
 

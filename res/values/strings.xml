@@ -28,12 +28,16 @@
     <string name="vdc">VDC</string>
     <string name="odometer">Odometer</string>
     <string name="tach">RPM</string>
+    <string name="calculatedMPGLabel">Overall MPG Average</string>
+    <string name="lastMPGLabel">Last MPG</string>
+    <string name="useCurrentLocation">Use Current Location</string>
+    <string name="current_location_hint">Current Location</string>
+    <string name="destination_hint">Destination Address</string>
+    <string name="directions_title">Get Directions</string>
+    <string name="stop_nav">Stop Navigation</string>
+    <string name="start_nav">Resume Navigation</string>
     
     <!-- Preference Strings -->
     <string name="logo_color">Logo Color</string>
-    <string name="directions_title">Get Directions</string>
-    <string name="stop_nav">Stop Navigation</string>
-    <string name="calculatedMPGLabel">Overall MPG Average</string>
-    <string name="lastMPGLabel">Last MPG</string>
 
 </resources>

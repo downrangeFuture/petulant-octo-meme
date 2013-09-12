@@ -18,7 +18,14 @@ public interface Constants {
 	public static final int MAP    = 1;
 	public static final int EXTRAS = 2;
 	
+	// ===========================================================
+	// Tags
+	
 	public static final String TACHOMETER_FRAGMENT_TAG = "tachometer_fragment";
 	public static final String MAP_FRAGMENT_TAG = "map_fragment";
 	public static final String EXTRAS_FRAGMENT_TAG = "extras_fragment";
+	public static final String ROUTE = "route";
+	public static final String LOCATION = "location";
+	public static final String DIRECTION_DIALOG = "direction_dialog";
+	public static final String STEP_INDEX = "step_index";
 }

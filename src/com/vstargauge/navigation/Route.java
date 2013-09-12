@@ -29,12 +29,12 @@ public class Route {
 	private RouteStep[] route;
 	private GetRouteCompleteListener mListener = null;
 
-	private double fromLat = -999.0;
+	private double fromLat  = -999.0;
 	private double fromLong = -999.0;
-	private double toLong = -999.0;
-	private double toLat = -999.0;
+	private double toLong   = -999.0;
+	private double toLat    = -999.0;
 	private String destination = "";
-	private String origin = "";
+	private String origin      = "";
 	private Context mContext;
 
 	protected int routeStatus = NO_ROUTE;
@@ -42,11 +42,11 @@ public class Route {
 	// =======================================================================
 	// Publics and Statics
 	// =======================================================================
-	public static final int ROUTE_OK = 0x01;
-	public static final int ROUTE_NOT_FOUND = 0x02;
-	public static final int ROUTE_NO_RESPONSE = 0x03;
+	public static final int ROUTE_OK             = 0x01;
+	public static final int ROUTE_NOT_FOUND      = 0x02;
+	public static final int ROUTE_NO_RESPONSE    = 0x03;
 	public static final int ROUTE_MALFORMED_JSON = 0x04;
-	public static final int NO_ROUTE = 0x05;
+	public static final int NO_ROUTE             = 0x05;
 
 	// =======================================================================
 	// Interfaces
@@ -223,6 +223,30 @@ public class Route {
 	public void setOnRouteTaskCompleteListener(
 			Route.GetRouteCompleteListener listener) {
 		mListener = listener;
+	}
+	
+	public void setFromLat(double latitude){
+		fromLat = latitude;
+	}
+	
+	public void setToLat(double latitude){
+		toLat = latitude;
+	}
+	
+	public void setFromLong(double longitude){
+		fromLong = longitude;
+	}
+	
+	public void setToLong(double longitude){
+		toLong = longitude;
+	}
+	
+	public void setOrigin(String address){
+		origin = address;
+	}
+	
+	public void setDestination(String address){
+		destination = address;
 	}
 
 	// =======================================================================
