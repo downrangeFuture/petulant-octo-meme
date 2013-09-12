@@ -13,6 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.downrangeproductions.vstargauge.R;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
+import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -25,175 +28,219 @@ import com.vstargauge.navigation.Route.GetRouteCompleteListener;
 import com.vstargauge.util.Constants;
 //import android.location.LocationListener;
 
-public class MapActivity extends Fragment implements LocationListener, RouteListener, GetRouteCompleteListener, Constants {
+public class MapActivity extends Fragment
+		implements
+			LocationListener,
+			ConnectionCallbacks,
+			OnConnectionFailedListener,
+			RouteListener,
+			GetRouteCompleteListener,
+			Constants {
 	// ========================================================
 	// private/protected variables
-	
+
 	private Route route;
 	private LocationClient mLocationClient;
 	private MapFragment mMapFragment;
 	private GoogleMap mMap;
 	private Location lastLocation;
 	private Navigation navHandler;
-	
+
 	// ========================================================
 	// Statics
-	
+
 	private static final LocationRequest REQUEST = LocationRequest.create()
 			.setInterval(5000).setFastestInterval(16)
 			.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-	
-	
-	
+
 	// ========================================================
 	// Public variables
-	
-	
-	
+
 	// ========================================================
 	// Interfaces
-	
+
 	@Override
-	public void onLocationChanged(Location location){
+	public void onLocationChanged(Location location) {
 		lastLocation = location;
 		navHandler.tick(lastLocation);
 	}
-	
+
 	// ========================================================
 	// Constructors
 
-	public MapActivity() { /* Blank c'tor */ }
+	public MapActivity() { /* Blank c'tor */
+	}
 
 	// ========================================================
 	// Overrides
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-		
+
 	}
-	
+
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-		
+
 		View view = inflater.inflate(R.layout.map_fragment, container);
 		route = new Route(this.getActivity());
-		
-		mMapFragment = (MapFragment) getActivity().getFragmentManager().findFragmentById(R.id.mapFragment);
+
+		mMapFragment = (MapFragment) getActivity().getFragmentManager()
+				.findFragmentById(R.id.mapFragment);
 		mLocationClient.requestLocationUpdates(REQUEST, this);
-		
+
 		navHandler = new Navigation();
 		navHandler.setRunning(false);
-		
+
 		return view;
 	}
-	
+
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.map_menu, menu);
 	}
-	
+
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item){
-		switch(item.getItemId()){
-			case R.id.get_directions:
-				//TODO Get some directions and start navigation
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.get_directions :
+				// TODO Get some directions and start navigation
 				return true;
-			case R.id.stop_navigation:
-				//TODO Pause or resume the current navigation
+			case R.id.stop_navigation :
+				// TODO Pause or resume the current navigation
 				return true;
-			default:
-				//Not our menu item
+			default :
+				// Not our menu item
 				return false;
 		}
 	}
-	
+
 	@Override
-	public void onResume(){
+	public void onResume() {
 		super.onResume();
-		
+
 		setUpMapIfNeeded();
 		setUpLocationClientIfNeeded();
 		mLocationClient.connect();
 	}
-	
+
 	@Override
-	public void onRouteMissed(){
+	public void onRouteMissed() {
+
+	}
+
+	@Override
+	public void onRouteResumed() {
 		
 	}
-	
+
 	@Override
-	public void onRouteResumed(){
-		
+	public void onWaypointReached() {
+
 	}
-	
+
 	@Override
-	public void onWaypointReached(){
-		
+	public void onDestinationReached() {
+
 	}
-	
+
 	@Override
-	public void onDestinationReached(){
-		
-	}
-	
-	@Override
-	public void onGetRouteComplete(int routeStatus){
+	public void onGetRouteComplete(int routeStatus) {
 		AlertDialog.Builder builder;
-		
-		switch (routeStatus){
-			case Route.ROUTE_OK:
+
+		switch (routeStatus) {
+			case Route.ROUTE_OK :
 				navHandler.changeRoute(route);
 				navHandler.setRunning(true);
 				navHandler.setRouteListener(this);
 				break;
-			case Route.NO_ROUTE:
+			case Route.NO_ROUTE :
 				builder = new AlertDialog.Builder(getActivity());
 				builder.setTitle("No Destination or Origin Specified")
-				       .setMessage("Please provide both destination and start points.");
+						.setMessage(
+								"Please provide both destination and start points.");
 				builder.show();
 				break;
-			case Route.ROUTE_MALFORMED_JSON:
+			case Route.ROUTE_MALFORMED_JSON :
 				builder = new AlertDialog.Builder(getActivity());
 				builder.setTitle("Directions Error")
-				       .setMessage("The directions were received but were corrupt. Try requesting directions again and check your internet connection.");
+						.setMessage(
+								"The directions were received but were corrupt. Try requesting directions again and check your internet connection.");
 				builder.show();
 				break;
-			case Route.ROUTE_NO_RESPONSE:
+			case Route.ROUTE_NO_RESPONSE :
 				builder = new AlertDialog.Builder(getActivity());
 				builder.setTitle("No Response from Google")
-				       .setMessage("No response from Google servers. Check that you can access the internet and try again. Also ensure you are in a region that has access to Google Directions.");
+						.setMessage(
+								"No response from Google servers. Check that you can access the internet and try again. Also ensure you are in a region that has access to Google Directions.");
 				builder.show();
 				break;
-			case Route.ROUTE_NOT_FOUND:
+			case Route.ROUTE_NOT_FOUND :
 				builder = new AlertDialog.Builder(getActivity());
 				builder.setTitle("Could Not Calcluate a Route")
-				       .setMessage("Google could not calculate a route between your start and end points. Check the address and try again.");
+						.setMessage(
+								"Google could not calculate a route between your start and end points. Check the address and try again.");
 				builder.show();
 				break;
-			default:
-				Log.wtf("onGetRouteComplete", "Route object contained unknown route status.");
+			default :
+				Log.wtf("onGetRouteComplete",
+						"Route object contained unknown route status.");
 		}
 	}
-	
+
+	@Override
+	public void onConnectionFailed(ConnectionResult result) {
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks
+	 * #onConnected(android.os.Bundle)
+	 */
+	@Override
+	public void onConnected(Bundle connectionHint) {
+		mLocationClient.requestLocationUpdates(REQUEST, this);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks
+	 * #onDisconnected()
+	 */
+	@Override
+	public void onDisconnected() {
+		//Do nothing
+	}
+
 	// ========================================================
 	// Methods
-	
-	protected void setUpMapIfNeeded(){
-		if(mMapFragment == null){
-			mMapFragment = (MapFragment) getActivity().getFragmentManager().findFragmentById(R.id.mapFragment);
+
+	protected void setUpMapIfNeeded() {
+		if (mMapFragment == null) {
+			mMapFragment = (MapFragment) getActivity().getFragmentManager()
+					.findFragmentById(R.id.mapFragment);
 		}
 		mMap = mMapFragment.getMap();
 		mMap.setMyLocationEnabled(true);
 		mMap.getUiSettings().setAllGesturesEnabled(true);
 	}
-	
-	protected void setUpLocationClientIfNeeded(){
-		
+
+	protected void setUpLocationClientIfNeeded() {
+		if (mLocationClient == null) {
+			mLocationClient = new LocationClient(getActivity()
+					.getApplicationContext(), this, this);
+		}
 	}
-	
+
 	// ========================================================
 	// Private inner classes
 }

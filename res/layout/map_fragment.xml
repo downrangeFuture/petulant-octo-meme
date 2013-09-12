@@ -30,16 +30,18 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/mphValue"
         android:layout_alignBottom="@+id/mphValue"
+        android:layout_marginLeft="8dp"
         android:layout_toRightOf="@+id/mphValue"
         android:text="@string/mph"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
-        android:id="@+id/tripLabel"
+        android:id="@+id/tripLabelExtras"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
+        android:layout_marginRight="8dp"
         android:text="@string/trip"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -48,7 +50,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/tripLabel"
+        android:layout_marginRight="8dp"
+        android:layout_toLeftOf="@+id/tripLabelExtras"
         android:text="Medium Text"
         android:textAppearance="?android:attr/textAppearanceMedium"
         tools:ignore="HardcodedText" />
@@ -58,6 +61,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/mphValue"
+        android:layout_marginRight="8dp"
         android:layout_toLeftOf="@+id/vdcLabel"
         android:text="Medium Text"
         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -69,6 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/rpmValue"
         android:layout_alignParentRight="true"
+        android:layout_marginRight="8dp"
         android:text="@string/vdc"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -78,6 +83,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/mphValue"
+        android:layout_marginLeft="8dp"
         android:text="----"
         android:textSize="40sp"
         tools:ignore="HardcodedText" />

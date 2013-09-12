@@ -33,5 +33,7 @@
     <string name="logo_color">Logo Color</string>
     <string name="directions_title">Get Directions</string>
     <string name="stop_nav">Stop Navigation</string>
+    <string name="calculatedMPGLabel">Overall MPG Average</string>
+    <string name="lastMPGLabel">Last MPG</string>
 
 </resources>

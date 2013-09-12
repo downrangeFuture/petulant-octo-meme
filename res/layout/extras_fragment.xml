@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="HardcodedText" >
+
+    <TextView
+        android:id="@+id/tachLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/rpmValue"
+        android:layout_alignBottom="@+id/rpmValue"
+        android:layout_alignLeft="@+id/mphLabel"
+        android:text="@string/tach"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/vdcLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/rpmValue"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="8dp"
+        android:text="@string/vdc"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/lastMPGText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/mpgText"
+        android:layout_marginLeft="8dp"
+        android:text="---.-"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/lastMPGLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/lastMPGText"
+        android:layout_alignBottom="@+id/lastMPGText"
+        android:layout_marginLeft="8dp"
+        android:layout_toRightOf="@+id/lastMPGText"
+        android:text="@string/lastMPGLabel"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/mphValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/rpmValue"
+        android:text="---"
+        android:textSize="40sp" />
+
+    <TextView
+        android:id="@+id/rpmValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/mphValue"
+        android:layout_marginLeft="8dp"
+        android:text="----"
+        android:textSize="40sp" />
+
+    <TextView
+        android:id="@+id/mphLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/mphValue"
+        android:layout_alignBottom="@+id/mphValue"
+        android:layout_marginLeft="8dp"
+        android:layout_toRightOf="@+id/mphValue"
+        android:text="@string/mph"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/vdcValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/rpmValue"
+        android:layout_marginRight="8dp"
+        android:layout_toLeftOf="@+id/vdcLabel"
+        android:text="---.-"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <AnalogClock
+        android:id="@+id/analogClock1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/lastMPGText" />
+
+    <TextView
+        android:id="@+id/calculatedMPGLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/lastMPGLabel"
+        android:layout_marginLeft="8dp"
+        android:layout_toRightOf="@+id/lastMPGText"
+        android:text="@string/calculatedMPGLabel"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/tripTextExtras"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/vdcValue"
+        android:layout_alignTop="@+id/rpmValue"
+        android:text="---.-"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/mpgText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tachLabel"
+        android:layout_toLeftOf="@+id/lastMPGLabel"
+        android:text="---.-"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/tripLabelExtras"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/vdcLabel"
+        android:layout_toRightOf="@+id/vdcValue"
+        android:text="@string/trip"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+</RelativeLayout>

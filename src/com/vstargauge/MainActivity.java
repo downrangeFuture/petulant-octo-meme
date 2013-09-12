@@ -1,7 +1,5 @@
 package com.vstargauge;
 
-import com.downrangeproductions.vstargauge.R;
-
 import ioio.lib.api.AnalogInput;
 import ioio.lib.api.DigitalInput;
 import ioio.lib.api.PulseInput;
@@ -13,6 +11,7 @@ import ioio.lib.util.android.IOIOActivity;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,13 +24,19 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.downrangeproductions.vstargauge.R;
+import com.vstargauge.navigation.Util;
+import com.vstargauge.util.Constants;
+
 public class MainActivity extends IOIOActivity
 		implements
-			ActionBar.OnNavigationListener {
+			ActionBar.OnNavigationListener, Constants {
 	
 	public static float rotationsPerMile;
 	public static final String UPDATE_INTENT = "perform_values_update";
 	public static final String UPDATE_VALUES = "update_values";
+	
+	protected int navigationItemState = Util.MAIN;
 
 	/**
 	 * The serialization (saved instance state) Bundle key representing the
@@ -56,7 +61,8 @@ public class MainActivity extends IOIOActivity
 						android.R.layout.simple_list_item_1,
 						android.R.id.text1, new String[]{
 								getString(R.string.title_section1),
-								getString(R.string.title_section2)}), this);
+								getString(R.string.title_section2),
+								getString(R.string.title_section3)}), this);
 		
 		rotationsPerMile = calcRotationsPerMile(170F, 80f, 15f);
 	}
@@ -65,8 +71,9 @@ public class MainActivity extends IOIOActivity
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 		// Restore the previously serialized current dropdown position.
 		if (savedInstanceState.containsKey(STATE_SELECTED_NAVIGATION_ITEM)) {
-			getActionBar().setSelectedNavigationItem(
-					savedInstanceState.getInt(STATE_SELECTED_NAVIGATION_ITEM));
+			final int navItem = savedInstanceState.getInt(STATE_SELECTED_NAVIGATION_ITEM);
+			getActionBar().setSelectedNavigationItem(navItem);
+			navigationItemState = navItem;
 		}
 	}
 
@@ -90,6 +97,10 @@ public class MainActivity extends IOIOActivity
 			case R.id.action_settings:
 				//TODO swap settings into fragment container
 				return true;
+			case R.id.reset_trip:
+				return true;
+			case R.id.calculate_mpg:
+				return true;
 			default:
 				return super.onOptionsItemSelected(item);
 		}
@@ -99,13 +110,39 @@ public class MainActivity extends IOIOActivity
 	public boolean onNavigationItemSelected(int position, long id) {
 		// When the given dropdown item is selected, show its contents in the
 		// container view.
-		Fragment fragment = (Fragment) new DummySectionFragment();
-		Bundle args = new Bundle();
-		args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
-		fragment.setArguments(args);
-		getFragmentManager().beginTransaction()
-				.replace(R.id.container, fragment).commit();
-		return true;
+		switch(position){
+			case Util.MAIN: // Main
+				if (this.navigationItemState == Util.MAIN){
+					return true;
+				} else {
+					Fragment frag = new TachFragment();
+					FragmentTransaction transaction = getFragmentManager().beginTransaction();
+					transaction.add(R.id.container, frag, Util.TACHOMETER_FRAGMENT_TAG);
+					transaction.commit();
+					return true;
+				}
+			case Util.MAP: // Map
+				if (this.navigationItemState == Util.MAP){
+					return true;
+				} else {
+					Fragment frag = new MapActivity();
+					FragmentTransaction transaction = getFragmentManager().beginTransaction();
+					transaction.add(R.id.container, frag, Util.MAP_FRAGMENT_TAG);
+					transaction.commit();
+					return true;
+				}
+			case Util.EXTRAS: // Extras
+				if (this.navigationItemState == Util.EXTRAS){
+					return true;
+				} else {
+					Fragment frag = new ExtrasFragment();
+					FragmentTransaction transaction = getFragmentManager().beginTransaction();
+					transaction.add(R.id.container, frag, Util.EXTRAS_FRAGMENT_TAG);
+					return true;
+				}
+			default:
+				return false;
+		}
 	}
 
 	/**

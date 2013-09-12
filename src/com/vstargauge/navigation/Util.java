@@ -7,7 +7,6 @@ import android.graphics.Point;
 import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.maps.GeoPoint;
 import com.vstargauge.util.Constants;
 import com.vstargauge.util.GraphicsPoint;
 

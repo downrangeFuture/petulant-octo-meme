@@ -9,7 +9,6 @@ import android.graphics.Point;
 import android.location.Location;
 import android.util.Log;
 
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.vstargauge.util.Constants;
 
@@ -30,7 +29,6 @@ public class Navigation implements Constants {
 	private volatile byte mRouteStatus = ROUTESTATUS_UNKNOWN;
 	private volatile Route mRoute;
 	private volatile int mCurrentSearchIndexCount = NavAlgorithm.BASE_SEARCHINDEX_COUNT;
-
 	private volatile LatLng mMyProjectedLocationMapPoint;
 
 	// TODO Add audible command manager
@@ -217,7 +215,15 @@ public class Navigation implements Constants {
 
 	// =============================================
 	// Getters/Setters
-
+	
+	public LatLng getProjectedLatLng(){
+		return this.mMyProjectedLocationMapPoint;
+	}
+	
+	public int getNextTurnPointIndex(){
+		return this.mNextRoutePointIndex;
+	}
+	
 	public Thread getNavThread() {
 		return mNavRunnerThread;
 	}

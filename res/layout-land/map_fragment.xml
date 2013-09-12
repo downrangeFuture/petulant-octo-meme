@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/tripLabel"
+        android:layout_below="@+id/tripLabelExtras"
         android:text="@string/vdc"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -42,7 +42,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
-        android:id="@+id/tripLabel"
+        android:id="@+id/tripLabelExtras"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -61,7 +61,7 @@
         tools:ignore="HardcodedText" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/tripText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/vdcLabel"
@@ -71,7 +71,7 @@
         tools:ignore="HardcodedText" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/calculatedMPGLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/vdcLabel"
