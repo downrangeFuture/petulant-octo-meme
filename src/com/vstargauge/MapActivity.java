@@ -83,23 +83,26 @@ public class MapActivity extends Fragment
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setHasOptionsMenu(true);
-
 		navHandler = new Navigation();
-		if(savedInstanceState.containsKey(Util.ROUTE)){
-			route = savedInstanceState.getParcelable(Util.ROUTE);
-			navHandler.changeRoute(route);
-			navHandler.setRunning(true);
+
+		setHasOptionsMenu(true);
+		if(savedInstanceState != null){
+			if(savedInstanceState.containsKey(Util.ROUTE)){
+				route = savedInstanceState.getParcelable(Util.ROUTE);
+				navHandler.changeRoute(route);
+				navHandler.setRunning(true);
+			}
+			
+			if(savedInstanceState.containsKey(Util.STEP_INDEX)){
+				stepIndex = savedInstanceState.getInt(Util.STEP_INDEX);
+				navHandler.setNextStepIndex(stepIndex);
+			}
 		} else {
 			route = new Route(this.getActivity());
 			navHandler.setRunning(false);
 		}
 		route.setOnRouteTaskCompleteListener(this);
 		
-		if(savedInstanceState.containsKey(Util.STEP_INDEX)){
-			stepIndex = savedInstanceState.getInt(Util.STEP_INDEX);
-			navHandler.setNextStepIndex(stepIndex);
-		}
 	}
 
 	@Override
@@ -119,7 +122,8 @@ public class MapActivity extends Fragment
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.map_menu, menu);
 		
-		stopNav = (MenuItem) getActivity().findViewById(R.id.stop_navigation);
+		stopNav = menu.findItem(R.id.stop_navigation);
+		
 		if(navHandler.isRunning()){
 			stopNav.setEnabled(true);
 			stopNav.setTitle(R.string.stop_nav);

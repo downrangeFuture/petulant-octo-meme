@@ -101,4 +101,12 @@
 
     </fragment>
 
+    <views.TurnIndicatorView
+        android:id="@+id/turnIndicatorView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tachLabel"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/mapFragment" />
+
 </RelativeLayout>
