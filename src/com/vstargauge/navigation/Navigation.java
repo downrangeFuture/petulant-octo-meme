@@ -35,12 +35,13 @@ public class Navigation implements Constants {
 	// TODO Add direction voice command listener
 
 	private int mNextRouteStepIndex = NOT_SET;
-//	private int mNextTurnPointIndex = NOT_SET;
-//	private int mNextTurnPointIndexInRoute = NOT_SET;
+	// private int mNextTurnPointIndex = NOT_SET;
+	// private int mNextTurnPointIndexInRoute = NOT_SET;
 	private int mDistanceToNextTurnPoint = NOT_SET;
 	private long mDistanceToDestination = NOT_SET;
 	private final long mTickDelay = 0;
 	// private float mPercentageDone = 0;
+	private int mIndexOfClosestPolyLinePoint = 0;
 
 	/**
 	 * Supposed to hold the Angle of the next turn.<br/>
@@ -146,28 +147,28 @@ public class Navigation implements Constants {
 		// }
 
 		mNextRouteStepIndex = 0;
-//		mNextTurnPointIndex = NOT_SET;
+		// mNextTurnPointIndex = NOT_SET;
 		// mNextTurnPointIndexInRoute = NOT_SET;
 		mDistanceToNextTurnPoint = NOT_SET;
 		mDistanceToDestination = NOT_SET;
 	}
 
-//	/**
-//	 * Gets the length of the current leg rounded off to a meter.
-//	 * 
-//	 * @return The current leg length in meters.
-//	 */
-//	public int getDistanceBetweenNextAndUpperNextWaypoint() {
-//		if (mNextTurnPointIndex == NOT_SET) {
-//			return Integer.MAX_VALUE;
-//		}
-//
-//		if (mNextTurnPointIndex >= mRoute.getRouteLength() - 1) {
-//			return Integer.MAX_VALUE;
-//		}
-//
-//		return Math.round(mRoute.getDistance(mNextTurnPointIndex));
-//	}
+	// /**
+	// * Gets the length of the current leg rounded off to a meter.
+	// *
+	// * @return The current leg length in meters.
+	// */
+	// public int getDistanceBetweenNextAndUpperNextWaypoint() {
+	// if (mNextTurnPointIndex == NOT_SET) {
+	// return Integer.MAX_VALUE;
+	// }
+	//
+	// if (mNextTurnPointIndex >= mRoute.getRouteLength() - 1) {
+	// return Integer.MAX_VALUE;
+	// }
+	//
+	// return Math.round(mRoute.getDistance(mNextTurnPointIndex));
+	// }
 
 	/**
 	 * Forces the navigator to call it's RouteListener.offRoute method if set on
@@ -190,8 +191,8 @@ public class Navigation implements Constants {
 	 */
 	public void tick(final Location newLocation) {
 		// We only want to process the tick if:
-		if (running && //We're enabled
-				!ticking && //We're not in the middle of a tick
+		if (running && // We're enabled
+				!ticking && // We're not in the middle of a tick
 				mRoute != null) { // And we have a valid route
 			// If the location is null or we haven't moved return
 			if (newLocation == null || newLocation.equals(lastLocation)) {
@@ -215,15 +216,15 @@ public class Navigation implements Constants {
 
 	// =============================================
 	// Getters/Setters
-	
-	public LatLng getProjectedLatLng(){
+
+	public LatLng getProjectedLatLng() {
 		return this.mMyProjectedLocationMapPoint;
 	}
-	
-	public int getNextTurnPointIndex(){
+
+	public int getNextTurnPointIndex() {
 		return this.mNextRouteStepIndex;
 	}
-	
+
 	public Thread getNavThread() {
 		return mNavRunnerThread;
 	}
@@ -231,15 +232,15 @@ public class Navigation implements Constants {
 	public void setRouteListener(RouteListener listener) {
 		mListener = listener;
 	}
-	
-	public void setNextStepIndex(int nextStepIndex){
+
+	public void setNextStepIndex(int nextStepIndex) {
 		mNextRouteStepIndex = nextStepIndex;
 	}
 
 	public boolean isTicking() {
 		return ticking;
 	}
-	
+
 	public boolean isRunning() {
 		return running;
 	}
@@ -254,6 +255,10 @@ public class Navigation implements Constants {
 
 	public int getDistanceToNextTurn() {
 		return mDistanceToNextTurnPoint;
+	}
+
+	public int getIndexOfClosestPolyPoint() {
+		return this.mIndexOfClosestPolyLinePoint;
 	}
 
 	// public synchronized void setNextRoutePointIndex(final int newIndex) {
@@ -318,6 +323,8 @@ public class Navigation implements Constants {
 				if (indexOfClosest == NOT_SET) {
 					return;
 				}
+
+				Navigation.this.mIndexOfClosestPolyLinePoint = indexOfClosest;
 
 				/* Calculate our location projected onto the route */
 				final int firstIndex = Math.max(0, indexOfClosest - 1);

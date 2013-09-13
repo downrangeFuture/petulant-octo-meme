@@ -60,7 +60,7 @@ public class TurnIndicatorView extends View implements Constants {
 		
 		switch (widthCode){
 			case View.MeasureSpec.AT_MOST:
-				width = (desiredWidth <= widthSize) ? desiredWidth : widthSize;
+				width = Math.min(desiredWidth, widthSize);
 				break;
 			case View.MeasureSpec.EXACTLY:
 				width = widthSize;
@@ -72,7 +72,7 @@ public class TurnIndicatorView extends View implements Constants {
 		}
 		switch (heightCode){
 			case View.MeasureSpec.AT_MOST:
-				height = (desiredHeight <= heightSize) ? desiredHeight : heightSize;
+				height = Math.min(desiredHeight, heightSize);
 				break;
 			case View.MeasureSpec.EXACTLY:
 				height = heightSize;
@@ -85,7 +85,7 @@ public class TurnIndicatorView extends View implements Constants {
 		
 		if(width != height){
 			width = Math.min(width, height);
-			height = width;
+			height = Math.min(width, height);
 		}
 		
 		mWidth = width;

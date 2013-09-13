@@ -98,7 +98,7 @@ public class RouteStep {
 	 *            The encoded string to decode
 	 * @return An ArrayList of {@link LatLng} that describes the Polyline
 	 */
-	public ArrayList<LatLng> decodeLine(String encoded) {
+	public static ArrayList<LatLng> decodeLine(String encoded) {
 		int len = encoded.length();
 		int index = 0;
 		int lat = 0;

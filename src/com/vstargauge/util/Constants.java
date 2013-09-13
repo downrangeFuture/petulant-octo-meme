@@ -18,6 +18,12 @@ public interface Constants {
 	public static final int MAP    = 1;
 	public static final int EXTRAS = 2;
 	
+	public static final float DEFAULT_ZOOM = 18f;
+	public static final float DEFAULT_TILT = 45f;
+	
+	public static final long ONE_TENTH_SECOND_IN_NANOS = (long) 1e8;
+	public static final long ONE_TENTH_SECOND_IN_MILLIS = 1000l;
+	
 	// ===========================================================
 	// Tags
 	
@@ -28,4 +34,5 @@ public interface Constants {
 	public static final String LOCATION = "location";
 	public static final String DIRECTION_DIALOG = "direction_dialog";
 	public static final String STEP_INDEX = "step_index";
+	public static final String NAV_ITEM_STATE = "nav_item_state";
 }

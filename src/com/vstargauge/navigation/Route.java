@@ -21,6 +21,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
+//TODO Make class Parcelable so MapActivty objects can save their instance
+
 public class Route {
 	// =======================================================================
 	// Private Variables
@@ -36,6 +38,7 @@ public class Route {
 	private String destination = "";
 	private String origin      = "";
 	private Context mContext;
+	protected ArrayList<LatLng> overallPolyline = new ArrayList<LatLng>();
 
 	protected int routeStatus = NO_ROUTE;
 
@@ -173,6 +176,13 @@ public class Route {
 	// =======================================================================
 	// Getters and Setters
 	// =======================================================================
+	
+	public ArrayList<LatLng> getOverallPolyline(){
+		if (overallPolyline == null){
+			return null;
+		}
+		return overallPolyline;
+	}
 
 	public LatLng getStartPoint(int stepNum) {
 		if(stepNum < 0 || stepNum > route.length - 1)
@@ -317,11 +327,20 @@ public class Route {
 				// parse
 				String status = directionsJSON.getString("status");
 				if (status.contentEquals("OK")) {
-					// If so we'll grab the steps array
+					// If so grab the overview polyline
+					JSONObject overviewLine = directionsJSON.getJSONArray("routes")
+							                                .getJSONObject(0)
+							                                .getJSONObject("overview_polyline");
+					String tempLine = overviewLine.getString("points");
+					// Decode and store it in the overallPolyline array
+					overallPolyline = RouteStep.decodeLine(tempLine);
+					
+					
+					// then we'll grab the steps array
 
 					JSONArray steps = directionsJSON.getJSONArray("routes")
-							.getJSONObject(0).getJSONArray("legs")
-							.getJSONObject(0).getJSONArray("steps");
+							                        .getJSONObject(0).getJSONArray("legs")
+							                        .getJSONObject(0).getJSONArray("steps");
 
 					// Iterator
 					int i = 0;
