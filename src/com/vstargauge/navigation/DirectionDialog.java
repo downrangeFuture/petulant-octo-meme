@@ -67,8 +67,10 @@ public class DirectionDialog extends DialogFragment implements OnClickListener, 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		View view = inflater.inflate(R.layout.navigation_dialog, container);
 		
-		if(savedInstanceState.containsKey(Util.LOCATION)){
-			location = savedInstanceState.getParcelable(LOCATION);
+		if(savedInstanceState != null){
+			if(savedInstanceState.containsKey(Util.LOCATION)){
+				location = savedInstanceState.getParcelable(LOCATION);
+			}
 		}
 		
 		destAddress = (EditText) view.findViewById(R.id.destinationAddress);

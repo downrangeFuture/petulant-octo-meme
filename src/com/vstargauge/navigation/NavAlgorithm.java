@@ -97,7 +97,7 @@ public class NavAlgorithm implements Constants {
 
 		while (iteration < maxSearchCount) {
 			final int testIndex = firstIndexPoint
-					+ calculateNextIndex(iteration);
+					+ (iteration + 1);
 			if (testIndex < polyLineLength && testIndex > 0) {
 				final float dist = Util.getDistanceToLine(
 						polyline.get(testIndex - 1), polyline.get(testIndex),
@@ -115,15 +115,6 @@ public class NavAlgorithm implements Constants {
 			iteration++;
 		}
 		return indexOfClosest;
-	}
-
-	/**
-	 * @param iteration
-	 * @return
-	 */
-	private static int calculateNextIndex(int iteration) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	// =============================================

@@ -82,6 +82,17 @@ public class MapActivity extends Fragment
 	@Override
 	public void onLocationChanged(Location location) {
 		lastLocation = location;
+		if(navHandler.isRunning() == false){
+			CameraPosition.Builder builder = new CameraPosition.Builder();
+			builder.bearing(Util.NORTH)
+			       .target(new LatLng(location.getLatitude(), location.getLongitude()))
+				   .tilt(mTilt)
+				   .zoom(mZoom);
+
+			mMap.animateCamera(CameraUpdateFactory.newCameraPosition(builder
+					.build()));
+			
+		}
 		navHandler.tick(lastLocation);
 	}
 
@@ -218,7 +229,11 @@ public class MapActivity extends Fragment
 
 	@Override
 	public void onCameraChange(CameraPosition position) {
-
+		if(position.tilt != mTilt)
+			mTilt = position.tilt;
+		
+		if(position.zoom != mZoom)
+			mZoom = position.zoom;
 	}
 
 	@Override
@@ -265,7 +280,7 @@ public class MapActivity extends Fragment
 						"Route object contained unknown route status.");
 		}
 	}
-
+	
 	@Override
 	public void onConnectionFailed(ConnectionResult result) {
 
@@ -302,8 +317,7 @@ public class MapActivity extends Fragment
 	 * 
 	 */
 	private void removeRoute() {
-		// TODO Auto-generated method stub
-
+		mMap.clear();
 	}
 	
 	private Polyline startNavigation(){

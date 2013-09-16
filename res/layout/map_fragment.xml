@@ -98,4 +98,11 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/rpmValue" />
 
+    <views.TurnIndicatorView
+        android:id="@+id/turnIndicatorView1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/mapFragment" />
+
 </RelativeLayout>

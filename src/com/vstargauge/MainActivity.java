@@ -73,7 +73,7 @@ public class MainActivity extends IOIOActivity
 			}
 		}
 
-		switchFragment(this.navigationItemState, true);
+//		switchFragment(this.navigationItemState, true);
 
 		rotationsPerMile = calcRotationsPerMile(170F, 80f, 15f);
 	}
@@ -132,15 +132,17 @@ public class MainActivity extends IOIOActivity
 	 *            screen orientation changes and such.
 	 * @return True if the fragment was switched.
 	 */
-	public boolean switchFragment(int fragment, boolean forceReplace) {
+	public boolean switchFragment(int fragment, boolean forceReplace) {		
+		Fragment frag = null;
+		FragmentTransaction transaction = null;
 		switch (fragment) {
 			case Util.MAIN : // Main
 				if (this.navigationItemState == Util.MAIN
 						&& forceReplace == false) {
 					return true;
 				} else {
-					Fragment frag = new TachFragment();
-					FragmentTransaction transaction = getFragmentManager()
+					frag = new TachFragment();
+					transaction = getFragmentManager()
 							.beginTransaction();
 					transaction.replace(R.id.container, frag,
 							Util.TACHOMETER_FRAGMENT_TAG);
@@ -153,8 +155,8 @@ public class MainActivity extends IOIOActivity
 						&& forceReplace == false) {
 					return true;
 				} else {
-					Fragment frag = new MapActivity();
-					FragmentTransaction transaction = getFragmentManager()
+					frag = new MapActivity();
+					transaction = getFragmentManager()
 							.beginTransaction();
 					transaction.replace(R.id.container, frag,
 							Util.MAP_FRAGMENT_TAG);
@@ -167,8 +169,8 @@ public class MainActivity extends IOIOActivity
 						&& forceReplace == false) {
 					return true;
 				} else {
-					Fragment frag = new ExtrasFragment();
-					FragmentTransaction transaction = getFragmentManager()
+					frag = new ExtrasFragment();
+					transaction = getFragmentManager()
 							.beginTransaction();
 					transaction.replace(R.id.container, frag,
 							Util.EXTRAS_FRAGMENT_TAG);

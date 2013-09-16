@@ -20,6 +20,10 @@ public interface Constants {
 	
 	public static final float DEFAULT_ZOOM = 18f;
 	public static final float DEFAULT_TILT = 45f;
+	public static final float NORTH = 0f;
+	public static final float EAST = 90f;
+	public static final float SOUTH = 180f;
+	public static final float WEST = 270f;
 	
 	public static final long ONE_TENTH_SECOND_IN_NANOS = (long) 1e8;
 	public static final long ONE_TENTH_SECOND_IN_MILLIS = 1000l;
