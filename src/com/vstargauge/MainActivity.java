@@ -34,8 +34,7 @@ public class MainActivity extends IOIOActivity
 			Constants {
 
 	public static float rotationsPerMile;
-	public static final String UPDATE_INTENT = "perform_values_update";
-	public static final String UPDATE_VALUES = "update_values";
+	
 
 	protected int navigationItemState = Util.MAIN;
 

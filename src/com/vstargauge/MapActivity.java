@@ -1,11 +1,19 @@
 package com.vstargauge;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
+import views.TurnIndicatorView;
+import views.TurnIndicatorView.Arrow;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,6 +21,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.downrangeproductions.vstargauge.R;
 import com.google.android.gms.common.ConnectionResult;
@@ -61,8 +70,12 @@ public class MapActivity extends Fragment
 	private int stepIndex = 0;
 	private float mZoom = Util.DEFAULT_ZOOM;
 	private float mTilt = Util.DEFAULT_TILT;
-//	private float mBearing;
+	// private float mBearing;
 	private Polyline mPolyline;
+	private TextView mMPHText = null, mRPMText = null, mTripText = null,
+			mVDCText = null;
+	private TurnIndicatorView turnView;
+	private volatile float mMph = 0, mRpm = 0, mTrip = 0, mVdc = 0;
 
 	// ========================================================
 	// Statics
@@ -82,19 +95,35 @@ public class MapActivity extends Fragment
 	@Override
 	public void onLocationChanged(Location location) {
 		lastLocation = location;
-		if(navHandler.isRunning() == false){
+		if (navHandler.isRunning() == false) {
 			CameraPosition.Builder builder = new CameraPosition.Builder();
 			builder.bearing(Util.NORTH)
-			       .target(new LatLng(location.getLatitude(), location.getLongitude()))
-				   .tilt(mTilt)
-				   .zoom(mZoom);
+					.target(new LatLng(location.getLatitude(), location
+							.getLongitude())).tilt(mTilt).zoom(mZoom);
 
 			mMap.animateCamera(CameraUpdateFactory.newCameraPosition(builder
 					.build()));
-			
+
 		}
 		navHandler.tick(lastLocation);
 	}
+
+	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Values values = (Values) intent.getExtras().getParcelable(
+					UPDATE_VALUES);
+
+			mVdc = values.vdc;
+			mRpm = values.rpm;
+			mMph = values.mph;
+
+			mTrip = getActivity().getSharedPreferences(PREFERENCES, 0)
+					.getFloat(TRIP_KEY, 0);
+
+			updateValues();
+		}
+	};
 
 	// ========================================================
 	// Constructors
@@ -128,6 +157,8 @@ public class MapActivity extends Fragment
 		}
 		route.setOnRouteTaskCompleteListener(this);
 
+		LocalBroadcastManager.getInstance(getActivity()).registerReceiver(
+				mReceiver, new IntentFilter(Util.UPDATE_VALUES));
 	}
 
 	@Override
@@ -139,8 +170,19 @@ public class MapActivity extends Fragment
 
 		mMapFragment = (MapFragment) getActivity().getFragmentManager()
 				.findFragmentById(R.id.mapFragment);
+		mMPHText = (TextView) getActivity().findViewById(R.id.mphValue);
+		mRPMText = (TextView) getActivity().findViewById(R.id.rpmValue);
+		mTripText = (TextView) getActivity().findViewById(R.id.tripText);
+		mVDCText = (TextView) getActivity().findViewById(R.id.vdcValue);
+		turnView = (TurnIndicatorView) getActivity().findViewById(R.id.turnIndicatorView1);
 
 		return view;
+	}
+
+	@Override
+	public void onDestroyView() {
+		LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(
+				mReceiver);
 	}
 
 	@Override
@@ -215,24 +257,56 @@ public class MapActivity extends Fragment
 		int closestPoint = navHandler.getIndexOfClosestPolyPoint();
 
 		showRoute(currStep, closestPoint, projectedLocation, mPolyline);
+
+		// TODO add in distance to next step when view is created
 	}
 
 	@Override
 	public void onWaypointReached() {
-
+		String instruction = route.getInstructions(navHandler.getNextTurnPointIndex() - 1);
+		String lower = instruction.toLowerCase(Locale.US);
+		Arrow arrow = Arrow.NONE;
+		if(lower.contains("turn left"))
+			arrow = Arrow.LEFT;
+		else if (lower.contains("turn right"))
+			arrow = Arrow.RIGHT;
+		else if (lower.contains("merge") || lower.contains("take"))
+			arrow = Arrow.MERGE_LEFT;
+		else if (lower.contains("u-turn"))
+			arrow = Arrow.U_TURN;
+		else if (lower.contains("continue"))
+			arrow = Arrow.STRAIGHT;
+		
+		turnView.changeTurnSymbol(arrow);
+		
+//		if(route.getRouteLength() != navHandler.getNextTurnPointIndex()){
+//			String nextTurnText;
+//			final int indexStart = instruction.indexOf("on");
+//			final int indexEnd = instruction.indexOf("for");
+//		
+//			if(indexStart == -1 || indexEnd == -1){
+//				nextTurnText = " ";
+//			} else {		
+//				nextTurnText = instruction.substring(indexStart + 2, indexEnd - 1);
+//			}
+//		
+			// TODO update next turn text
+//		}
 	}
 
 	@Override
 	public void onDestinationReached() {
-
+		// TODO Stop navigating, remove remaining polyline, leave destination
+		// flag.
+		// TODO find resource for destination flag
 	}
 
 	@Override
 	public void onCameraChange(CameraPosition position) {
-		if(position.tilt != mTilt)
+		if (position.tilt != mTilt)
 			mTilt = position.tilt;
-		
-		if(position.zoom != mZoom)
+
+		if (position.zoom != mZoom)
 			mZoom = position.zoom;
 	}
 
@@ -280,7 +354,7 @@ public class MapActivity extends Fragment
 						"Route object contained unknown route status.");
 		}
 	}
-	
+
 	@Override
 	public void onConnectionFailed(ConnectionResult result) {
 
@@ -319,15 +393,15 @@ public class MapActivity extends Fragment
 	private void removeRoute() {
 		mMap.clear();
 	}
-	
-	private Polyline startNavigation(){
+
+	private Polyline startNavigation() {
 		PolylineOptions options = new PolylineOptions();
-		
+
 		options.addAll(route.getOverallPolyline());
-		
+
 		return mMap.addPolyline(options);
 	}
-	
+
 	/**
 	 * @param currStep
 	 * @param closestPoint
@@ -367,7 +441,7 @@ public class MapActivity extends Fragment
 		for (int i = currStep + 1; i <= route.getRouteLength(); i++) {
 			routeLine.addAll(route.getPolyline(i));
 		}
-		
+
 		pPolyline.setPoints(routeLine);
 	}
 
@@ -401,7 +475,7 @@ public class MapActivity extends Fragment
 		/*
 		 * To determine if the closest point is in front of us or behind us, we
 		 * determined the true initial bearing to the closest point. Now we need
-		 * to determine if that point falls within plus or minus 90 degress of
+		 * to determine if that point falls within plus or minus 90 degrees of
 		 * the bearing we're heading.
 		 */
 		double relPlus = (bearing + 90.0) % 360;
@@ -448,6 +522,73 @@ public class MapActivity extends Fragment
 			mLocationClient = new LocationClient(getActivity()
 					.getApplicationContext(), this, this);
 		}
+	}
+
+	/**
+	 * 
+	 */
+	protected void updateValues() {
+		// Set MPH text
+		String temp = "";
+		if (mMph < 100.0) {
+			temp += " ";
+			if (mMph < 10.0)
+				temp += " ";
+		}
+
+		temp += String.format("%3.0f", mMph);
+		mMPHText.setText(temp);
+
+		// Set RPM text
+		temp = "";
+
+		if (mRpm < 1000) {
+			temp += " ";
+			if (mRpm < 100) {
+				temp += " ";
+				if (mRpm < 10) {
+					temp += " ";
+				}
+			}
+		}
+
+		temp += String.format("%4.0f", mRpm);
+		mRPMText.setText(temp);
+
+		// Set VDC text
+		temp = "";
+
+		if(mVdc < 1){
+			temp = "0.0";	
+		} else {
+			if (mVdc < 10) {
+				temp += " ";
+			}
+			temp += String.format("%2.1f", mVdc);
+		}
+		
+		mVDCText.setText(temp);
+
+		temp = "";
+
+		// Set Trip text
+		if(mTrip < 0){
+			temp = "0.0";	
+		} else if(mTrip > 999.9){
+			 temp = "999.9";
+		} else {
+			if (mTrip < 100) {
+				temp += " ";
+				if (mTrip < 10) {
+					temp += " ";
+					if (mTrip < 1) {
+						temp += " ";
+					}
+				}
+			}
+			temp += String.format("%3.1f", mTrip);
+		}
+		mTripText.setText(temp);
 	}
 
 	// ========================================================

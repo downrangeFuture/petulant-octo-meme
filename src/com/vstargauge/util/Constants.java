@@ -39,4 +39,12 @@ public interface Constants {
 	public static final String DIRECTION_DIALOG = "direction_dialog";
 	public static final String STEP_INDEX = "step_index";
 	public static final String NAV_ITEM_STATE = "nav_item_state";
+	public static final String UPDATE_INTENT = "perform_values_update";
+	public static final String UPDATE_VALUES = "update_values";
+	
+	// ============================================================
+	// Settings Keys
+	
+	public static final String PREFERENCES = "prefs";
+	public static final String TRIP_KEY = "trip";
 }
