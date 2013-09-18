@@ -18,6 +18,7 @@
     <string name="vdc_high">Battery voltage over 14VDC. Is the regulator functioning properly? Voltage exceeding 17VDC may cause damage to bike and IOIO board.</string>
     <string name="ouch_title">Over voltage!!!</string>
     <string name="ouch">Volts exceed 17VDC. Shutdown bike immedately. Check charging system and battery for damage.</string>
+    <string name="reset_trip_confirm">Are you sure?</string>
     
     <!-- Title, textView, and button strings -->
     <string name="OK">OK</string>
@@ -39,5 +40,9 @@
     
     <!-- Preference Strings -->
     <string name="logo_color">Logo Color</string>
+    <string name="gauge_options">Gauge Options</string>
+    <string name="odometer_summary">The current odometer reading: </string>
+    <string name="units">Measurement Units</string>
+    <string name="bike_options">Bike Options</string>
 
 </resources>

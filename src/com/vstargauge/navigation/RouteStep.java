@@ -2,11 +2,13 @@ package com.vstargauge.navigation;
 
 import java.util.ArrayList;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.Html;
 
 import com.google.android.gms.maps.model.LatLng;
 
-public class RouteStep {
+public class RouteStep implements Parcelable {
 	public RouteStep() {
 	}
 
@@ -141,5 +143,44 @@ public class RouteStep {
 			out = null;
 		}
 		return out;
+	}
+	
+	public static final Parcelable.Creator<RouteStep> CREATOR = 
+			new Parcelable.Creator<RouteStep>() {
+
+				@Override
+				public RouteStep createFromParcel(Parcel source) {
+					return new RouteStep(source);
+				}
+
+				@Override
+				public RouteStep[] newArray(int size) {
+					return new RouteStep[size];
+				}
+		
+			};
+			
+	@SuppressWarnings("unchecked")
+	private RouteStep(Parcel in){
+		start = in.readParcelable(null);
+		end = in.readParcelable(null);
+		distance = in.readLong();
+		duration = in.readLong();
+		polyLine = in.readArrayList(null);
+		instructions = in.readString();
+	}
+	
+	@Override
+	public int describeContents(){
+		return 0;
+	}
+	
+	public void writeToParcel(Parcel out, int flags){
+		out.writeParcelable(start, flags);
+		out.writeParcelable(end, flags);
+		out.writeLong(distance);
+		out.writeLong(duration);
+		out.writeList(polyLine);
+		out.writeString(instructions);
 	}
 }

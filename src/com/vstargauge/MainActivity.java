@@ -13,8 +13,11 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -40,7 +43,7 @@ public class MainActivity extends IOIOActivity
 
 	/**
 	 * The serialization (saved instance state) Bundle key representing the
-	 * current dropdown position.
+	 * current drop down position.
 	 */
 	private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
 
@@ -49,12 +52,12 @@ public class MainActivity extends IOIOActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		// Set up the action bar to show a dropdown list.
+		// Set up the action bar to show a drop down list.
 		final ActionBar actionBar = getActionBar();
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
-		// Set up the dropdown list navigation in the action bar.
+		// Set up the drop down list navigation in the action bar.
 		actionBar.setListNavigationCallbacks(
 		// Specify a SpinnerAdapter to populate the dropdown list.
 				new ArrayAdapter<String>(actionBar.getThemedContext(),
@@ -79,7 +82,7 @@ public class MainActivity extends IOIOActivity
 
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
-		// Restore the previously serialized current dropdown position.
+		// Restore the previously serialized current drop down position.
 		if (savedInstanceState.containsKey(STATE_SELECTED_NAVIGATION_ITEM)) {
 			final int navItem = savedInstanceState
 					.getInt(STATE_SELECTED_NAVIGATION_ITEM);
@@ -90,7 +93,7 @@ public class MainActivity extends IOIOActivity
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
-		// Serialize the current dropdown position.
+		// Serialize the current drop down position.
 		outState.putInt(STATE_SELECTED_NAVIGATION_ITEM, getActionBar()
 				.getSelectedNavigationIndex());
 	}
@@ -109,7 +112,24 @@ public class MainActivity extends IOIOActivity
 				// TODO swap settings into fragment container
 				return true;
 			case R.id.reset_trip :
-				// TODO reset trip meter
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(R.string.reset_trip_title)
+				       .setMessage(R.string.reset_trip_confirm)
+				       .setPositiveButton(R.string.OK, new OnClickListener(){
+				    	   @Override
+				    	   public void onClick(DialogInterface dialog, int which) {
+				    		   Editor editor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
+				    		   editor.putFloat(TRIP_KEY, 0.0f);
+				    		   editor.commit();
+				    	   }
+				       })
+				       .setNegativeButton(R.string.cancel, new OnClickListener(){
+				    	   @Override
+				    	   public void onClick(DialogInterface dialog, int which){
+				    		   dialog.dismiss();
+				    	   }
+				       });
+				builder.show();
 				return true;
 			case R.id.calculate_mpg :
 				// TODO implement calculate mpg dialog
@@ -183,7 +203,7 @@ public class MainActivity extends IOIOActivity
 
 	@Override
 	public boolean onNavigationItemSelected(int position, long id) {
-		// When the given dropdown item is selected, show its contents in the
+		// When the given drop down item is selected, show its contents in the
 		// container view.
 
 		return switchFragment(position, false);

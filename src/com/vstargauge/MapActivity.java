@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -46,8 +47,6 @@ import com.vstargauge.navigation.Route.GetRouteCompleteListener;
 import com.vstargauge.navigation.Util;
 import com.vstargauge.util.Constants;
 //import android.location.LocationListener;
-
-//TODO Setup onSaveInstanceState(Bundle)
 
 public class MapActivity extends Fragment
 		implements
@@ -118,7 +117,7 @@ public class MapActivity extends Fragment
 			mRpm = values.rpm;
 			mMph = values.mph;
 
-			mTrip = getActivity().getSharedPreferences(PREFERENCES, 0)
+			mTrip = PreferenceManager.getDefaultSharedPreferences(getActivity())
 					.getFloat(TRIP_KEY, 0);
 
 			updateValues();
@@ -234,6 +233,12 @@ public class MapActivity extends Fragment
 		setUpMapIfNeeded();
 		setUpLocationClientIfNeeded();
 		mLocationClient.connect();
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle out){
+		out.putParcelable(ROUTE, route);
+		out.putInt(Util.STEP_INDEX, navHandler.getNextTurnPointIndex());
 	}
 
 	@Override
@@ -360,25 +365,11 @@ public class MapActivity extends Fragment
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks
-	 * #onConnected(android.os.Bundle)
-	 */
 	@Override
 	public void onConnected(Bundle connectionHint) {
 		mLocationClient.requestLocationUpdates(REQUEST, this);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks
-	 * #onDisconnected()
-	 */
 	@Override
 	public void onDisconnected() {
 		// Do nothing
@@ -446,7 +437,7 @@ public class MapActivity extends Fragment
 	}
 
 	/**
-	 * Uses spherical trigonmetery to determine if a point is behind us in a
+	 * Uses spherical trigonometry to determine if a point is behind us in a
 	 * relative sense. It does this by determining the bearing from the
 	 * currentPoint to the closestPoint in true bearing, then calculating if
 	 * that true bearing falls within + or - 90 degrees of the provided bearing.

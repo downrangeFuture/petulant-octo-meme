@@ -24,6 +24,7 @@ public interface Constants {
 	public static final float EAST = 90f;
 	public static final float SOUTH = 180f;
 	public static final float WEST = 270f;
+	public static final float GESTURE_THRESHOLD_DIP = 16f;
 	
 	public static final long ONE_TENTH_SECOND_IN_NANOS = (long) 1e8;
 	public static final long ONE_TENTH_SECOND_IN_MILLIS = 1000l;
@@ -47,4 +48,7 @@ public interface Constants {
 	
 	public static final String PREFERENCES = "prefs";
 	public static final String TRIP_KEY = "trip";
+	public static final String LOGO_COLOR_KEY = "logo_color";
+	public static final String UNITS_KEY = "units";
+	public static final String ODOMETER_KEY = "odometer";
 }

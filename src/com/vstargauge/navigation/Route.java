@@ -16,14 +16,14 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
-//TODO Make class Parcelable so MapActivty objects can save their instance
-
-public class Route {
+public class Route implements Parcelable {
 	// =======================================================================
 	// Private Variables
 	// =======================================================================
@@ -50,6 +50,17 @@ public class Route {
 	public static final int ROUTE_NO_RESPONSE    = 0x03;
 	public static final int ROUTE_MALFORMED_JSON = 0x04;
 	public static final int NO_ROUTE             = 0x05;
+	
+	public static final Parcelable.Creator<Route> CREATOR =
+			new Parcelable.Creator<Route>() {
+				public Route createFromParcel(Parcel in){
+					return new Route(in);
+				}
+				
+				public Route[] newArray(int size){
+					return new Route[size];
+				}
+			};
 
 	// =======================================================================
 	// Interfaces
@@ -67,6 +78,19 @@ public class Route {
 	// =======================================================================
 	// Ctors
 	// =======================================================================
+	
+	@SuppressWarnings("unchecked")
+	private Route(Parcel in){
+		urlString = new StringBuffer(in.readString());
+		route = (RouteStep[]) in.readParcelableArray(null);
+		fromLat = in.readDouble();
+		fromLong = in.readDouble();
+		toLat = in.readDouble();
+		toLong = in.readDouble();
+		destination = in.readString();
+		origin = in.readString();
+		overallPolyline = in.readArrayList(null);
+	}
 
 	public Route(Context context) {
 
@@ -257,6 +281,23 @@ public class Route {
 	
 	public void setDestination(String address){
 		destination = address;
+	}
+	
+	@Override
+	public int describeContents(){
+		return 0;
+	}
+	
+	public void writeToParcel(Parcel out, int flags){
+		out.writeString(urlString.toString());
+		out.writeParcelableArray(route, flags);
+		out.writeDouble(fromLat);
+		out.writeDouble(fromLong);
+		out.writeDouble(toLat);
+		out.writeDouble(toLong);
+		out.writeString(destination);
+		out.writeString(origin);
+		out.writeList(overallPolyline);
 	}
 
 	// =======================================================================

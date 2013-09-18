@@ -108,4 +108,23 @@
         android:layout_alignParentTop="true"
         android:layout_alignRight="@+id/mapFragment" />
 
+    <Button
+        android:id="@+id/instructionViewLand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:text="Default Text"
+        android:background="@drawable/text_nine_patch" />
+
+    <Button
+        android:id="@+id/distanceViewLand"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/turnIndicatorView1"
+        android:text="9999ft"
+        android:background="@drawable/text_nine_patch" />
+
 </RelativeLayout>
