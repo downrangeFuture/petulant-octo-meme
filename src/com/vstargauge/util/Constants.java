@@ -51,4 +51,6 @@ public interface Constants {
 	public static final String LOGO_COLOR_KEY = "logo_color";
 	public static final String UNITS_KEY = "units";
 	public static final String ODOMETER_KEY = "odometer";
+	public static final String MPG_KEY = "mpg_key";
+	public static final String LAST_MPG_KEY = "last_mpg_key";
 }

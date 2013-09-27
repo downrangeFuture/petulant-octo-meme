@@ -4,9 +4,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <SurfaceView
-        android:id="@+id/tachSurface"
+    <views.TachView
+        android:id="@+id/tachView1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="fill_parent" />
 
 </LinearLayout>

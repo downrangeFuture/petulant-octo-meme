@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="TachView">
-    	<attr name="background" format="reference"/>
+    	<attr name="background" format="reference" />
+    	<attr name="needle" format="reference" />
     	<attr name="textSize" format="dimension" />
     	<attr name="logoColor" format="color|reference" />
     </declare-styleable>

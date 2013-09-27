@@ -36,6 +36,8 @@ public class Util implements Constants {
 	// =============================================
 	// Methods
 
+
+
 	public static Point geoPoint2Point(Location loc) {
 		int longE6 = (int) (loc.getLongitude() * 1e6);
 		int latE6 = (int) (loc.getLatitude() * 1e6);

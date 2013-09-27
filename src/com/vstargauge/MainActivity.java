@@ -73,6 +73,8 @@ public class MainActivity extends IOIOActivity
 				navigationItemState = savedInstanceState
 						.getInt(MainActivity.STATE_SELECTED_NAVIGATION_ITEM);
 			}
+		} else {
+			getActionBar().setSelectedNavigationItem(navigationItemState);
 		}
 
 //		switchFragment(this.navigationItemState, true);
@@ -109,7 +111,10 @@ public class MainActivity extends IOIOActivity
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.action_settings :
-				// TODO swap settings into fragment container
+				Fragment frag = new SettingsFragment();
+				FragmentTransaction transaction = getFragmentManager().beginTransaction();
+				transaction.replace(R.id.container, frag);
+				transaction.commit();
 				return true;
 			case R.id.reset_trip :
 				AlertDialog.Builder builder = new AlertDialog.Builder(this);
