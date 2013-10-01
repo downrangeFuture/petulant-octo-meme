@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -160,32 +161,53 @@ public class MapActivity extends Fragment
 				mReceiver, new IntentFilter(Util.UPDATE_VALUES));
 	}
 
+	private static View view;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-
-		View view = inflater.inflate(R.layout.map_fragment, null);
-
+		
+		if(view != null){
+			ViewGroup parent = (ViewGroup) view.getParent();
+			
+			if(parent != null){
+				parent.removeView(view);
+			}
+		}
+		try{
+			view = inflater.inflate(R.layout.map_fragment, null);
+		} catch (InflateException e){
+			/* Map is already attached, just return the view */
+		}
+		
 		mMapFragment = (MapFragment) getActivity().getFragmentManager()
 				.findFragmentById(R.id.mapFragment);
-		mMPHText = (TextView) getActivity().findViewById(R.id.mphValue);
-		mRPMText = (TextView) getActivity().findViewById(R.id.rpmValue);
-		mTripText = (TextView) getActivity().findViewById(R.id.tripText);
-		mVDCText = (TextView) getActivity().findViewById(R.id.vdcValue);
-		turnView = (TurnIndicatorView) getActivity().findViewById(R.id.turnIndicatorView1);
+		mMPHText = (TextView) view.findViewById(R.id.mphValue);
+		mRPMText = (TextView) view.findViewById(R.id.rpmValue);
+		mTripText = (TextView) view.findViewById(R.id.tripText);
+		mVDCText = (TextView) view.findViewById(R.id.vdcValue);
+		turnView = (TurnIndicatorView) view.findViewById(R.id.turnIndicatorView1);
 
 		return view;
 	}
 
 	@Override
 	public void onDestroyView() {
+		super.onDestroyView();
 		LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(
 				mReceiver);
+		
+//		MapFragment frag = (MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment);
+//		if(frag != null){
+//			getFragmentManager().beginTransaction().remove(frag).commit();
+//		}
+		
 	}
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
 		inflater.inflate(R.menu.map_menu, menu);
 
 		stopNav = menu.findItem(R.id.stop_navigation);

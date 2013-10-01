@@ -85,6 +85,8 @@ public class DirectionDialog extends DialogFragment implements OnClickListener, 
 		if (location == null){
 			useCurrentLocation.setChecked(false);
 			useCurrentLocation.setEnabled(false);
+			startAddress.setEnabled(true);
+			startAddress.setHint("Start Address");
 		}
 		
 		return view;

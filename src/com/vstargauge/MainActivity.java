@@ -83,6 +83,13 @@ public class MainActivity extends IOIOActivity
 	}
 
 	@Override
+	public void onStart(){
+		switchFragment(this.navigationItemState, true);
+		
+		super.onStart();
+	}
+	
+	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 		// Restore the previously serialized current drop down position.
 		if (savedInstanceState.containsKey(STATE_SELECTED_NAVIGATION_ITEM)) {

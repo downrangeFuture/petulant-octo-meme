@@ -3,6 +3,8 @@
  */
 package com.vstargauge;
 
+import views.TachView;
+
 import com.downrangeproductions.vstargauge.R;
 
 import android.app.Fragment;
@@ -50,7 +52,7 @@ public class TachFragment extends Fragment {
 
 	// =============================================
 	// Methods
-
+	
 	// =============================================
 	// Private inner Classes
 }

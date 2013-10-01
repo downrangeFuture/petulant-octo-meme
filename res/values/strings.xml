@@ -3,6 +3,7 @@
 
     <!-- Application strings -->
     <string name="app_name">VStarGauge</string>
+    <string name="map_tag">map_tag</string>
     
     <!-- Menu Strings -->
     <string name="action_settings">Settings</string>

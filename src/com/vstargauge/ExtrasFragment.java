@@ -136,6 +136,8 @@ public class ExtrasFragment extends Fragment {
 	@Override
 	public void onDestroyView(){
 		LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
+		
+		super.onDestroyView();
 	}
 
 	// =============================================
