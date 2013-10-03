@@ -38,6 +38,8 @@
     <string name="directions_title">Get Directions</string>
     <string name="stop_nav">Stop Navigation</string>
     <string name="start_nav">Resume Navigation</string>
+    <string name="trip_gauge_label">:Trip</string>
+    <string name="odometer_gauge_label">:Odometer</string>
     
     <!-- Preference Strings -->
     <string name="logo_color">Logo Color</string>

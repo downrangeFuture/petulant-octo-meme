@@ -4,9 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <views.TachView
-        android:id="@+id/tachView1"
+    <views.GaugeView
+        android:id="@+id/gaugeView1"
         android:layout_width="match_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="match_parent" >
+    </views.GaugeView>
 
 </LinearLayout>

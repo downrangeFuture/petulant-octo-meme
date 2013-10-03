@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="TachView">
+    <declare-styleable name="GaugeComponent">
     	<attr name="background" format="reference" />
-    	<attr name="needle" format="reference" />
-    	<attr name="textSize" format="dimension" />
-    	<attr name="logoColor" format="color|reference" />
+    </declare-styleable>
+    
+    <declare-styleable name="Needle">
+        <attr name="image" format="reference" />
+    	<attr name="min_angle" format="float" />
+    	<attr name="max_angle" format="float" />
+    	<attr name="rotate_clockwise" format="boolean" />
+    	<attr name="max_value" format="float" />
+    	<attr name="min_value" format="float" />
     </declare-styleable>
 </resources>

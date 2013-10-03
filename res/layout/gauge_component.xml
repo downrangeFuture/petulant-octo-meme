@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res/com.downrangeproductions.vstargauge"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/gaugeView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:ignore="HardcodedText" >
+
+    <ImageView
+        android:id="@+id/gaugeBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="Gauge Background"
+        android:src="@drawable/v_star_gauge" />
+
+    <ImageView
+        android:id="@+id/neutralLight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="220dp"
+        android:contentDescription="Neutral Light"
+        android:src="@drawable/neutral_light" />
+
+    <ImageView
+        android:id="@+id/turnLight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/neutralLight"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@+id/neutralLight"
+        android:contentDescription="Turn Signal Light"
+        android:src="@drawable/turn_light" />
+
+    <TextView
+        android:id="@+id/tripLabelGauge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/odometerLabelGauge"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="100dp"
+        android:text="@string/trip_gauge_label"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#000000" />
+
+    <TextView
+        android:id="@+id/odometerLabelGauge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tripLabelGauge"
+        android:layout_marginRight="20dp"
+        android:text="@string/odometer_gauge_label"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#000000" />
+
+    <TextView
+        android:id="@+id/tripValueGauge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/odometerLabelGauge"
+        android:layout_marginRight="16dp"
+        android:layout_toLeftOf="@+id/tripLabelGauge"
+        android:gravity="right"
+        android:text="---.-"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#000000" />
+
+    <TextView
+        android:id="@+id/odometerValueGauge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/odometerLabelGauge"
+        android:layout_alignBottom="@+id/odometerLabelGauge"
+        android:layout_alignRight="@+id/tripValueGauge"
+        android:gravity="right"
+        android:text="-----"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#000000" />
+
+    <TextView
+        android:id="@+id/vdcText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="480dp"
+        android:text="@string/vdc"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#000000" />
+
+    <views.NeedleView
+        android:id="@+id/speedNeedle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        custom:image="@drawable/small_needle"
+        custom:max_angle="300.0"
+        custom:max_value="120.0"
+        custom:min_angle="120"
+        custom:min_value="0.0"
+        custom:rotate_clockwise="true" />
+
+    <views.NeedleView
+        android:id="@+id/tachNeedle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        custom:image="@drawable/small_needle"
+        custom:max_angle="345.0"
+        custom:max_value="7000.0"
+        custom:min_angle="195"
+        custom:min_value="0.0"
+        custom:rotate_clockwise="false" />
+
+</RelativeLayout>
